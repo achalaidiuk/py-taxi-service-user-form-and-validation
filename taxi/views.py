@@ -68,13 +68,15 @@ class CarDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["is_driver"] = self.request.user in self.object.drivers.all()
+        context["is_driver"] = (
+            self.object.drivers.filter(id=self.request.user.id).exists()
+        )
         return context
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         car = self.get_object()
 
-        if request.user in car.drivers.all():
+        if car.drivers.filter(id=request.user.id).exists():
             car.drivers.remove(request.user)
         else:
             car.drivers.add(request.user)
