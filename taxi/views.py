@@ -64,7 +64,7 @@ class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
 
     def get_queryset(self):
-        return Car.objects.prefetch_related("drivers").all()
+        return Car.objects.prefetch_related("drivers")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
